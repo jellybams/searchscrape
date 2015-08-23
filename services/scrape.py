@@ -3,11 +3,8 @@ from collections import deque
 from datetime import datetime
 from urlparse import urlparse
 from urlparse import urljoin
-from mongoengine import connect
 from models.page import Page
 import requests
-
-from pprint import pprint
 
 
 class PageScraper:
