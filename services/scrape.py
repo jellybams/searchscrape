@@ -1,8 +1,7 @@
 from lxml import html
 from collections import deque
 from datetime import datetime
-from urlparse import urlparse
-from urlparse import urljoin
+from urlparse import urlparse, urljoin
 from models.page import Page
 import requests
 

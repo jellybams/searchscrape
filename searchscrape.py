@@ -1,4 +1,3 @@
-import json
 from config import configer, getargs
 from mongoengine import connect
 from services.search import Gsearch
