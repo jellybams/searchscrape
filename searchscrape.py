@@ -5,20 +5,18 @@ from mongoengine import connect
 from services.search import Gsearch
 from services.scrape import ScraperQueue
 
-from pprint import pprint
+config = configer()
 
-# argument parsing to get search term
 parser = argparse.ArgumentParser(
     description='Search google and scrape links from first 20 results.')
 parser.add_argument('-q', '--query', dest='search_term', action='store',
                     default='', help='the term to search google for', required=True)
 args = parser.parse_args()
 
-config = configer()
 connect(config['db']['db'], host=config['db']
         ['host'], port=config['db']['port'])
-search_term = args.search_term
 
+search_term = args.search_term
 sq = ScraperQueue(search_term=search_term)
 gsearch = Gsearch(api_key=config['provider']['google']['api_key'],
                   cse_id=config['provider']['google']['cse_id'])
