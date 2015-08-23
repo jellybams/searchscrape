@@ -29,7 +29,5 @@ class Gsearch:
             'start': start_idx
         }
 
-        print payload
-
         r = requests.get(self.base_url, params=payload)
         return r.json()

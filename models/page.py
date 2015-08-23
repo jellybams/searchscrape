@@ -10,6 +10,7 @@ class Page(Document):
     created_at = DateTimeField()
     updated_at = DateTimeField()
     meta = {
+    	'collection': 'page_links',
         'indexes': [
             'title',
             'search_term'
