@@ -1,3 +1,4 @@
+import argparse
 from configobj import ConfigObj
 from os import environ
 
@@ -31,3 +32,10 @@ def configer():
 	config['scraper']['max_depth'] = int(config['scraper']['max_depth'])
 
 	return config
+
+def getargs():
+	parser = argparse.ArgumentParser(
+	    description='Search google and scrape links from first 20 results.')
+	parser.add_argument('-q', '--query', dest='search_term', action='store',
+	                    default='', help='the term to search google for', required=True)
+	return parser.parse_args()
