@@ -21,11 +21,12 @@ sq = ScraperQueue(search_term=search_term)
 gsearch = Gsearch(api_key=config['provider']['google']['api_key'],
 	cse_id=config['provider']['google']['cse_id'])
 
-start = 0
-while sq.queue_size() < 20
+start = 1
+while sq.queue_size() < 20:
+	print "q size: " + str(sq.queue_size())
 	results = gsearch.query(search_term, start)
 	sq.enqueue(results['items'], None)
-	start = results['queries']['startIndex']
+	start = results['queries']['nextPage'][0]['startIndex']
 
 sq.enqueue(results['items'], None)
 sq.run(config['scraper']['max_depth'])
