@@ -23,7 +23,12 @@ class PageScraper:
         except requests.exceptions.RequestException as e:
             logger.error(e)
 
-        tree = html.fromstring(res.text) if res.text else etree.Element("root")
+        tree = etree.Element('root')
+        try:
+            tree = html.fromstring(res.text)
+        except ValueError:
+            logger.error('failed to parse html for %s', page['link'])
+
         ret = {
             'link': page['link'],
             'links': [],

@@ -1,4 +1,3 @@
-import json
 from config import configer, getargs, getlogger
 from mongoengine import connect
 from services.search import Gsearch
@@ -32,13 +31,5 @@ while sq.queue_size() < 20:
     if retries == 10:
     	logger.error('reached max retries')
     	sys.exit()
-
-
-# -----
-# with open('./tmp/results.json') as data_file:
-#     logger.info('loading json')
-#     results = json.load(data_file)
-# sq.enqueue(results['items'], None)
-# -----
 
 sq.run(config['scraper']['max_depth'])
