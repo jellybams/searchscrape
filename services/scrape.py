@@ -1,9 +1,12 @@
-from lxml import html
+from lxml import html, etree
+from config import getlogger
 from collections import deque
 from datetime import datetime
 from urlparse import urlparse, urljoin
 from models.page import Page
 import requests
+
+logger = getlogger()
 
 
 class PageScraper:
@@ -14,8 +17,13 @@ class PageScraper:
         Get all the links from `page['link']`
         """
 
-        res = requests.get(page['link'])
-        tree = html.fromstring(res.text)
+        logger.info('getting contents of %s', page['link'])
+        try:
+            res = requests.get(page['link'])
+        except requests.exceptions.RequestException as e:
+            logger.error(e)
+
+        tree = html.fromstring(res.text) if res.text else etree.Element("root")
         ret = {
             'link': page['link'],
             'links': [],
@@ -62,6 +70,8 @@ class ScraperQueue:
         return len(self.pending)
 
     def enqueue(self, items, parent):
+        logger.info(
+            'adding ' + str(len(items)) + ' with parent ' + str(parent) + ' to scrape queue')
         for item in items:
             self.pending.append({
                 'link': item['link'],
@@ -104,12 +114,10 @@ class ScraperQueue:
                     parent_id = instance.id
                     self.curr_parent = page['parent']
 
-            print '\n\ncrawl level ' + str(depth)
-            print 'max level: ' + str(max_depth)
-            print 'scraping page: ' + page['link']
-            print 'page id: ' + str(instance.id)
-            print 'page parent: ' + str(page['parent'])
-            print 'queue size: ' + str(len(self.pending))
+            logger.info('crawl level: %d, max depth: %d, queue size: %d',
+                        depth, max_depth, len(self.pending))
+            logger.info(
+                'crawling page id %s, url: %s', str(instance.id), page['link'])
 
             # queue up the links for another level of crawling
             if depth < max_depth:

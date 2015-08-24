@@ -1,4 +1,6 @@
 import requests
+from config import getlogger
+logger = getlogger()
 
 
 class Gsearch:
@@ -28,6 +30,13 @@ class Gsearch:
             'q': phrase,
             'start': start_idx
         }
+        logger.info('search engine %s being queried for %s starting with record %d',
+                    self.cse_id, phrase, start_idx)
+        res = None
+        try:
+            res = requests.get(self.base_url, params=payload)
+        except requests.exceptions.RequestException as e:
+            logger.error(e)
 
-        r = requests.get(self.base_url, params=payload)
-        return r.json()
+        results = res.json() if res is not None else None
+        return results
