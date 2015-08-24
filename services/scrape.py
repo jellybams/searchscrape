@@ -75,7 +75,7 @@ class ScraperQueue:
         for item in items:
             self.pending.append({
                 'link': item['link'],
-                'text': item['text'] if hasattr(item, 'text') else None,
+                'text': item['text'] if 'text' in item else None,
                 'search_term': self.search_term,
                 'links': [],
                 'parent': parent
